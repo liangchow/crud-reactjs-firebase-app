@@ -8,13 +8,15 @@ function App() {
     {firstName: "Simone", lastName: "Ming", comment: "You're the best ;) I have not met people like you. I am wishing you the best in your future endeavors", rating: 5, status: true, src: ""},
     ])
 
-  const [status, setStatus] = useState(true)
-
   function handleToggleStatus(index){
-      setStatus(!status)
-      console.log(status)
-      todos[index].status == status;
-      console.log(todos[index].status)
+    setTodos(todos.map((todo, todoIndex) => {
+      if (todoIndex === index){
+        console.log(index)
+        return {...todo, status: !todo.status}
+      } else {
+        return todo
+      }
+    }))
     }
 
   function headshot(peer){
