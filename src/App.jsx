@@ -8,6 +8,8 @@ function App() {
     {firstName: "Simone", lastName: "Ming", comment: "You're the best ;) I have not met people like you. I am wishing you the best in your future endeavors", rating: 5, status: true, src: ""},
     ])
 
+  const [status, setStatus] = useState(true)
+
   function handleToggleStatus(index){
       setStatus(!status)
       console.log(status)
@@ -32,7 +34,7 @@ function App() {
     <div className='flex flex-col flex-1 gap-10'>
       <ul className='flex flex-col flex-1 gap-1 p-4'>
         {todos.map((todo, todoIndex) => (
-          <li className="max-w-[1000px] w-full mx-auto flex justify-between items-center bg-white mt-2 p-2 hover:shadow-lg rounded-3xl border-2 border-solid border-indigo-300">
+          <li key={todoIndex} className="max-w-[1000px] w-full mx-auto flex justify-between items-center bg-white mt-2 p-2 hover:shadow-lg rounded-3xl border-2 border-solid border-indigo-300">
             <div className='flex ml-1 w-15'>
                       {headshot(todo)}
             </div>
@@ -42,7 +44,7 @@ function App() {
             </div>
             <div className='flex p-2 ml-1 text-nowrap '>⭐ {todo.rating}/5</div>
             <div className='flex flex-col items-center p-2 gap-2 '>
-              <button onClick={() => handleToggleStatus(index)}><i className={"text-indigo-600 hover:text-indigo-400 cursor-pointer transition " + (status==true ? " fa-solid fa-eye-slash" : " fa-solid fa-eye")}></i></button>
+              <button onClick={() => handleToggleStatus(todoIndex)}><i className={"text-indigo-600 hover:text-indigo-400 cursor-pointer transition " + (status==true ? " fa-solid fa-eye-slash" : " fa-solid fa-eye")}></i></button>
             </div>
           </li>
         ))}
