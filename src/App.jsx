@@ -13,11 +13,10 @@ function App() {
     ])
 
   function handleToggleStatus(index){
-    console.log(todos[index])
-    const newTodos = [...todos]
-    newTodos[index].status = !newTodos[index].status
-    setTodos(newTodos)
-    console.log(todos[index])
+    const updatedTodos = [...todos]
+    updatedTodos[index].status = !updatedTodos[index].status
+    setTodos(updatedTodos)
+    console.log(updatedTodos[index])
     }
 
   function headshot(peer){
@@ -42,13 +41,13 @@ function App() {
               <div className='flex ml-1 w-15'>
                 {headshot(todo)}
               </div>
-              <div className={'flex flex-col ml-1 w-full ' + (todo.status == true ? ' opacity-50' : '')}>     
+              <div className={'flex flex-col ml-1 w-full ' + (todo.status == false ? ' opacity-50' : '')}>     
                 <span className='text-lg sm:text-xl font-semibold '>{todo.firstName} {todo.lastName}</span>
                 <span className='text-base sm:text-lg'>{todo.comment}</span>
               </div>
               <div className='flex p-2 ml-1 text-nowrap '>⭐ {todo.rating}/5</div>
               <div className='flex flex-col items-center p-2 gap-2 '>
-                <button onClick={() => handleToggleStatus(todoIndex)}><i className={"text-indigo-600 hover:text-indigo-400 cursor-pointer transition " + (todo.status == true ? " fa-solid fa-eye-slash opacity-50" : " fa-solid fa-eye")}></i></button>
+                <button onClick={() => handleToggleStatus(todoIndex)}><i className={"text-indigo-600 hover:text-indigo-400 cursor-pointer transition " + (todo.status == false ? " fa-solid fa-eye-slash opacity-50" : " fa-solid fa-eye")}></i></button>
               </div>
             </li>
           ))) 
@@ -59,7 +58,7 @@ function App() {
       <h2 className='text-indigo-800 text-center'>Display Below:</h2>
 
       <ul className='flex flex-col flex-1 gap-1 p-4'>
-        {todos?.map((todo, todoIndex) => (
+        {todos?.filter(todo => todo.status == true).map((todo, todoIndex) => (
             <li key={todoIndex} className="max-w-[1000px] w-full mx-auto flex justify-between items-center bg-white mt-2 p-2 hover:shadow-lg rounded-3xl border-2 border-solid border-indigo-300">
               <div className='flex ml-1 w-15'>
                 {headshot(todo)}
