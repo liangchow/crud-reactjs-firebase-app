@@ -10,10 +10,8 @@ function App() {
 
   function handleToggleStatus(index){
     console.log(todos[index])
-    setTodos( prevTodos => 
-        prevTodos.map(todo => 
-          todo.id === index ? {...todo, status: !todo.status} : todo
-        ))
+    const newStatus = todos[index]
+    setTodos()
     console.log(todos[index])
     }
 
@@ -45,7 +43,7 @@ function App() {
               </div>
               <div className='flex p-2 ml-1 text-nowrap '>⭐ {todo.rating}/5</div>
               <div className='flex flex-col items-center p-2 gap-2 '>
-                <button onClick={() => handleToggleStatus(todoIndex)}><i className={"text-indigo-600 hover:text-indigo-400 cursor-pointer transition " + (todo.status==true ? " fa-solid fa-eye-slash" : " fa-solid fa-eye")}></i></button>
+                <button onClick={handleToggleStatus}><i className={"text-indigo-600 hover:text-indigo-400 cursor-pointer transition " + (todo.status==true ? " fa-solid fa-eye-slash" : " fa-solid fa-eye")}></i></button>
               </div>
             </li>
           ))) 
