@@ -5,18 +5,16 @@ function App() {
 
   const [todos, setTodos] = useState([
     {firstName: "Joe", lastName: "Doe", comment: "You are awesome!", rating: 4, status: true, src: ""},
-    {firstName: "Simone", lastName: "Ming", comment: "You're the best ;) I have not met people like you. I am wishing you the best in your future endeavors", rating: 5, status: true, src: ""},
+    {firstName: "Simone", lastName: "Ming", comment: "You're the best ;) I have not met people like you. I am wishing you the best in your future endeavors", rating: 5, status: false, src: ""},
     ])
 
   function handleToggleStatus(index){
-    setTodos(todos.map((todo, todoIndex) => {
-      if (todoIndex === index){
-        console.log(index)
-        return {...todo, status: !todo.status}
-      } else {
-        return todo
-      }
-    }))
+    console.log(todos[index])
+    setTodos( prevTodos => 
+        prevTodos.map(todo => 
+          todo.id === index ? {...todo, status: !todo.status} : todo
+        ))
+    console.log(todos[index])
     }
 
   function headshot(peer){
@@ -46,7 +44,7 @@ function App() {
             </div>
             <div className='flex p-2 ml-1 text-nowrap '>⭐ {todo.rating}/5</div>
             <div className='flex flex-col items-center p-2 gap-2 '>
-              <button onClick={() => handleToggleStatus(todoIndex)}><i className={"text-indigo-600 hover:text-indigo-400 cursor-pointer transition " + (status==true ? " fa-solid fa-eye-slash" : " fa-solid fa-eye")}></i></button>
+              <button onClick={() => handleToggleStatus(todoIndex)}><i className={"text-indigo-600 hover:text-indigo-400 cursor-pointer transition " + (todo.status==true ? " fa-solid fa-eye-slash" : " fa-solid fa-eye")}></i></button>
             </div>
           </li>
         ))}
