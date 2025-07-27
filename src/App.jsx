@@ -12,10 +12,11 @@ function App() {
     {firstName: "Jane", lastName: "Moon", comment: "Aiks! You are getting there.", rating: 4, status: true, src: ""}
     ])
   const [comment, setComment] = useState('')
-  const [rating, setRating] =useState(null)
+  const [star, setStar] =useState(null)
+  const [hover, setHover] = useState(null)
 
-  function handleAddTodo(newComment){
-    const newTodo = {firstName: "New", lastName: "Person", comment: newComment, rating: 5, status: true, src: ""}
+  function handleAddTodo(newFeedback, newStar){
+    const newTodo = {firstName: "New", lastName: "Person", comment: newFeedback, rating: newStar, status: true, src: ""}
     const updatedTodos = [newTodo, ...todos]
     setTodos(updatedTodos)
   }
@@ -45,7 +46,22 @@ function App() {
       
       <div className='flex flex-1 w-full justify-center gap-2 p-4'>
         <form >
-          <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="Enter feedback" value={comment} onChange={(e) => setComment(e.target.value)}></input>
+          <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="Enter feedback" value={comment} onChange={(e) => setComment(e.target.value)} />
+          {Array.from(Array(5).map((star, starIndex) => {
+            const currentStar = starIndex + 1
+            return (
+              <label key={starIndex}>
+                <input key={star} type="radio" value={currentStar} onChange={()=> setStar(currentStar)}/>
+                <span style={{
+                color:
+                  currentStar <= (hover || star) ? "#ffc107" : "#e4e5e9",
+              }}
+              onMouseEnter={() => setHover(currentStar)}
+              onMouseLeave={() => setHover(null)}>&#9733;</span>
+              </label>
+            )            
+          }))
+          }
         </form>
         <button className='text-indigo-600 hover:text-indigo-400 cursor-pointer transition duration-200' onClick={() => {
                 handleAddTodo(comment)
