@@ -47,7 +47,7 @@ function App() {
       <div className='flex flex-1 w-full justify-center gap-2 p-4'>
         <form >
           <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="Enter feedback" value={comment} onChange={(e) => setComment(e.target.value)} />
-          {Array.from(Array(5).map((star, starIndex) => {
+          {[...Array(5)].map((star, starIndex) => {
             const currentStar = starIndex + 1
             return (
               <label key={starIndex}>
@@ -60,7 +60,7 @@ function App() {
               onMouseLeave={() => setHover(null)}>&#9733;</span>
               </label>
             )            
-          }))
+          })
           }
         </form>
         <button className='text-indigo-600 hover:text-indigo-400 cursor-pointer transition duration-200' onClick={() => {
