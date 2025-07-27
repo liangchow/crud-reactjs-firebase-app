@@ -11,6 +11,14 @@ function App() {
     {firstName: "Simone", lastName: "Ming", comment: "You're the best ;) I have not met people like you. I am wishing you the best in your future endeavors", rating: 5, status: false, src: ""},
     {firstName: "Jane", lastName: "Moon", comment: "Aiks! You are getting there.", rating: 4, status: true, src: ""}
     ])
+  const [comment, setComment] = useState('')
+  const [rating, setRating] =useState(null)
+
+  function handleAddTodo(newComment){
+    const newTodo = {firstName: "New", lastName: "Person", comment: newComment, rating: 5, status: true, src: ""}
+    const updatedTodos = [newTodo, ...todos]
+    setTodos(updatedTodos)
+  }
 
   function handleToggleStatus(index){
     const updatedTodos = [...todos]
@@ -33,7 +41,18 @@ function App() {
   }
 
   return (
-    <div className='flex flex-col flex-1 gap-10'>
+    <div className='flex flex-col flex-1 gap-4'>
+      
+      <div className='flex flex-1 w-full justify-center gap-2 p-4'>
+        <form >
+          <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="Enter feedback" value={comment} onChange={(e) => setComment(e.target.value)}></input>
+        </form>
+        <button className='text-indigo-600 hover:text-indigo-400 cursor-pointer transition duration-200' onClick={() => {
+                handleAddTodo(comment)
+                setComment('')
+            }}> Submit</button>
+      </div>
+      
       <ul className='flex flex-col flex-1 gap-1 p-4'>
         { todos && todos.length > 0 ? (
           todos?.map((todo, todoIndex) => (
@@ -47,7 +66,7 @@ function App() {
               </div>
               <div className='flex p-2 ml-1 text-nowrap '>⭐ {todo.rating}/5</div>
               <div className='flex flex-col items-center p-2 gap-2 '>
-                <button onClick={() => handleToggleStatus(todoIndex)}><i className={"text-indigo-600 hover:text-indigo-400 cursor-pointer transition " + (todo.status == false ? " fa-solid fa-eye-slash opacity-50" : " fa-solid fa-eye")}></i></button>
+                <button onClick={() => handleToggleStatus(todoIndex)}><i className={"text-indigo-600 hover:text-indigo-400 cursor-pointer transition duration-200 " + (todo.status == false ? " fa-solid fa-eye-slash opacity-50" : " fa-solid fa-eye")}></i></button>
               </div>
             </li>
           ))) 
