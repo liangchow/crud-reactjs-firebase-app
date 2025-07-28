@@ -48,20 +48,16 @@ function App() {
         <form >
           <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="Enter feedback" value={comment} onChange={(e) => setComment(e.target.value)} />
           {[...Array(5)].map((star, starIndex) => {
-            const currentStar = starIndex + 1
+            const currentStar = starIndex
             return (
-              <label key={starIndex}>
-                <input key={star} type="radio" value={currentStar} onChange={()=> setStar(currentStar)}/>
-                <span style={{
-                color:
-                  currentStar <= (hover || star) ? "#ffc107" : "#e4e5e9",
-              }}
-              onMouseEnter={() => setHover(currentStar)}
-              onMouseLeave={() => setHover(null)}>&#9733;</span>
-              </label>
+                  <button type='button' key={starIndex} className={'text-amber-200 text-2xl cursor-pointer ' + (starIndex <= (hover || star) ? 'text-amber-400' : '')}
+                    onClick={()=> setStar(starIndex)}
+                    onMouseEnter={() => setHover(starIndex)}
+                    onMouseLeave={() => setHover(currentStar)}>
+                      <span>&#9733;</span>
+                  </button>
             )            
-          })
-          }
+          })}
         </form>
         <button className='text-indigo-600 hover:text-indigo-400 cursor-pointer transition duration-200' onClick={() => {
                 handleAddTodo(comment)
