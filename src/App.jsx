@@ -12,11 +12,11 @@ function App() {
     {firstName: "Jane", lastName: "Moon", comment: "Aiks! You are getting there.", rating: 4, status: true, src: ""}
     ])
   const [comment, setComment] = useState('')
-  const [star, setStar] =useState(null)
+  const [rating, setRating] = useState(0)
   const [hover, setHover] = useState(null)
 
-  function handleAddTodo(newFeedback, newStar){
-    const newTodo = {firstName: "New", lastName: "Person", comment: newFeedback, rating: newStar, status: true, src: ""}
+  function handleAddTodo(newFeedback, newRating){
+    const newTodo = {firstName: "New", lastName: "Person", comment: newFeedback, rating: newRating, status: true, src: ""}
     const updatedTodos = [newTodo, ...todos]
     setTodos(updatedTodos)
   }
@@ -48,19 +48,19 @@ function App() {
         <form >
           <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="Enter feedback" value={comment} onChange={(e) => setComment(e.target.value)} />
           {[...Array(5)].map((star, starIndex) => {
-            const currentStar = starIndex
+            starIndex += 1
             return (
-                  <button type='button' key={starIndex} className={'text-amber-200 text-2xl cursor-pointer ' + (starIndex <= (hover || star) ? 'text-amber-400' : '')}
-                    onClick={()=> setStar(starIndex)}
+                  <button type='button' key={starIndex} className={'text-amber-200 text-2xl cursor-pointer ' + (starIndex <= (hover || rating) ? 'text-amber-400' : '')}
+                    onClick={()=> setRating(starIndex)}
                     onMouseEnter={() => setHover(starIndex)}
-                    onMouseLeave={() => setHover(currentStar)}>
+                    onMouseLeave={() => setHover(rating)}>
                       <span>&#9733;</span>
                   </button>
             )            
           })}
         </form>
         <button className='text-indigo-600 hover:text-indigo-400 cursor-pointer transition duration-200' onClick={() => {
-                handleAddTodo(comment)
+                handleAddTodo(comment, rating)
                 setComment('')
             }}> Submit</button>
       </div>
