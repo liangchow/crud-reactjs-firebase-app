@@ -50,7 +50,7 @@ function App() {
           {[...Array(5)].map((star, starIndex) => {
             starIndex += 1
             return (
-                  <button type='button' key={starIndex} className={'text-amber-200 text-2xl cursor-pointer ' + (starIndex <= (hover || rating) ? 'text-amber-400' : '')}
+                  <button type='button' key={starIndex} className={'text-2xl cursor-pointer opacity-50 ' + (starIndex <= (hover || rating) ? 'text-amber-400' : '')}
                     onClick={()=> setRating(starIndex)}
                     onMouseEnter={() => setHover(starIndex)}
                     onMouseLeave={() => setHover(rating)}>
