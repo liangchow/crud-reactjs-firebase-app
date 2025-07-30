@@ -41,6 +41,12 @@ function App() {
     }
   }
 
+  // Create todo
+  // Read todo from firebase
+  // Update todo in firevase
+  // Delete todo
+
+
   return (
     <div className='flex flex-col flex-1 gap-4'>
       
