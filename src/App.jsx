@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './index.css'
-import {db} from './firebase-config'
+import {db} from './firebase'
 import {query, collection} from 'firebase/firestore'
 
 // https://www.javascripttutorial.net/react-tutorial/react-todo-app/
