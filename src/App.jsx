@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './index.css'
+import {db} from './firebase-config'
+import {query, collection} from 'firebase/firestore'
 
 // https://www.javascripttutorial.net/react-tutorial/react-todo-app/
 // https://upmostly.com/tutorials/build-a-todo-app-in-react-using-hooks
@@ -44,6 +46,11 @@ function App() {
 
   // Create todo
   // Read todo from firebase
+  useEffect(() => {
+    const q = query(collection(db,'todos'))
+  },[])
+
+
   // Update todo in firevase
   // Delete todo
 
