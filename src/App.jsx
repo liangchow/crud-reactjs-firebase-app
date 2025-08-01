@@ -14,12 +14,14 @@ function App() {
     {firstName: "Simone", lastName: "Ming", comment: "You're the best ;) I have not met people like you. I am wishing you the best in your future endeavors", rating: 5, status: false, src: ""},
     {firstName: "Jane", lastName: "Moon", comment: "Aiks! You are getting there.", rating: 4, status: true, src: ""}
     ])
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [comment, setComment] = useState('')
   const [rating, setRating] = useState(0)
   const [hover, setHover] = useState(null)
 
-  function handleAddTodo(newFeedback, newRating){
-    const newTodo = {firstName: "New", lastName: "Person", comment: newFeedback, rating: newRating, status: true, src: ""}
+  function handleAddTodo(newFirstName, newLastName, newFeedback, newRating){
+    const newTodo = {firstName: newFirstName, lastName: newLastName, comment: newFeedback, rating: newRating, status: true, src: ""}
     const updatedTodos = [newTodo, ...todos]
     setTodos(updatedTodos)
   }
@@ -45,7 +47,7 @@ function App() {
   }
 
   // Create todo
-  const createtodo = async (e) => {
+  const createTodo = async (e) => {
     e.preventDefault(e)
     if (input === ''){
       alert('Please enter a valid comment.')
@@ -74,6 +76,8 @@ function App() {
       
       <div className='flex flex-1 w-full justify-center gap-2 p-4'>
         <form >
+          <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="First Name" value={firstName} onChange={(e) => setComment(e.target.value)} />
+          <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="Last Name" value={lastName} onChange={(e) => setComment(e.target.value)} />
           <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="Enter feedback" value={comment} onChange={(e) => setComment(e.target.value)} />
           {[...Array(5)].map((star, starIndex) => {
             starIndex += 1
@@ -88,7 +92,7 @@ function App() {
           })}
         </form>
         <button className='text-indigo-600 hover:text-indigo-400 cursor-pointer transition duration-200' onClick={() => {
-                handleAddTodo(comment, rating)
+                handleAddTodo(firstName, lastName, comment, rating)
                 setComment('')
             }}> Submit</button>
       </div>
