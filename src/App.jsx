@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './index.css'
 import {db} from './firebase'
-import {query, collection} from 'firebase/firestore'
+import {query, collection, addDoc} from 'firebase/firestore'
 
 // https://www.javascripttutorial.net/react-tutorial/react-todo-app/
 // https://upmostly.com/tutorials/build-a-todo-app-in-react-using-hooks
@@ -45,6 +45,20 @@ function App() {
   }
 
   // Create todo
+  const createtodo = async (e) => {
+    e.preventDefault(e)
+    if (input === ''){
+      alert('Please enter a valid comment.')
+      return
+    }
+    await addDoc(collection(db, 'todos'), {
+      comment: input,
+      rating: 5,
+      status: true,
+      src: ''
+    })
+  }
+
   // Read todo from firebase
   useEffect(() => {
     const q = query(collection(db,'todos'))
