@@ -54,6 +54,7 @@ function App() {
       return
     }
     await addDoc(collection(db, 'todos'), {
+      firstName: firstName,
       comment: input,
       rating: 5,
       status: true,
@@ -76,8 +77,8 @@ function App() {
       
       <div className='flex flex-1 w-full justify-center gap-2 p-4'>
         <form >
-          <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="First Name" value={firstName} onChange={(e) => setComment(e.target.value)} />
-          <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="Last Name" value={lastName} onChange={(e) => setComment(e.target.value)} />
+          <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+          <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
           <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="Enter feedback" value={comment} onChange={(e) => setComment(e.target.value)} />
           {[...Array(5)].map((star, starIndex) => {
             starIndex += 1
