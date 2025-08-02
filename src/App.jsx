@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './index.css'
 import {db} from './firebase'
-import {query, collection, addDoc} from 'firebase/firestore'
+import {query, collection, doc, getDoc, addDoc} from 'firebase/firestore'
 
 // https://www.javascripttutorial.net/react-tutorial/react-todo-app/
 // https://upmostly.com/tutorials/build-a-todo-app-in-react-using-hooks
@@ -9,11 +9,12 @@ import {query, collection, addDoc} from 'firebase/firestore'
 
 function App() {
 
-  const [todos, setTodos] = useState([
-    {firstName: "Joe", lastName: "Doe", comment: "You are awesome!", rating: 4, status: true, src: ""},
-    {firstName: "Simone", lastName: "Ming", comment: "You're the best ;) I have not met people like you. I am wishing you the best in your future endeavors", rating: 5, status: false, src: ""},
-    {firstName: "Jane", lastName: "Moon", comment: "Aiks! You are getting there.", rating: 4, status: true, src: ""}
-    ])
+  // const [todos, setTodos] = useState([
+  //   {firstName: "Joe", lastName: "Doe", comment: "You are awesome!", rating: 4, status: true, src: ""},
+  //   {firstName: "Simone", lastName: "Ming", comment: "You're the best ;) I have not met people like you. I am wishing you the best in your future endeavors", rating: 5, status: false, src: ""},
+  //   {firstName: "Jane", lastName: "Moon", comment: "Aiks! You are getting there.", rating: 4, status: true, src: ""}
+  //   ])
+  const [todos, setTodos] = useState([])
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [comment, setComment] = useState('')
@@ -64,7 +65,21 @@ function App() {
 
   // Read todo from firebase
   useEffect(() => {
-    const q = query(collection(db,'todos'))
+    async function fetchTodos(){
+      try {
+        const docRef = doc(db, 'todos', 'demoUser')
+        const docSnap = await getDoc(docRef)
+        if (docSnap.exists()){
+          console.log('Found user data')
+          console.log(docSnap.data())
+          setTodos(docSnap.data())
+        } 
+      } catch (err) {
+        console.log(err)
+      }
+      // finally {setLoading(false)}
+    }
+    fetchTodos()
   },[])
 
 
