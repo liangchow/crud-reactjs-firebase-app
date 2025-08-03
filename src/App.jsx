@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './index.css'
 import {db} from './firebase'
-import {query, collection, doc, addDoc, getDocs} from 'firebase/firestore'
+import {query, collection, where, addDoc, getDocs} from 'firebase/firestore'
 
 // https://www.javascripttutorial.net/react-tutorial/react-todo-app/
 // https://upmostly.com/tutorials/build-a-todo-app-in-react-using-hooks
@@ -67,14 +67,14 @@ function App() {
   useEffect(() => {
     async function fetchTodos(){
       try {
-        // const docRef = collection(db, 'todos','demoUser','todo')
-        const querySnapshot = await getDocs(collection(db, 'todos','demoUser','todo'))
+        const q = collection(db, "todos").where("userId", "==", "test-user-1")
+        const querySnapshot = await getDocs(q)
         if (querySnapshot){
           console.log('Found user data')
           querySnapshot.forEach((doc) => {
             console.log(doc.id, "=>", doc.data())
           })
-          setTodos(querySnapshot.doc.data())
+          setTodos(querySnapshot)
         } 
       } catch (err) {
         console.log(err)
