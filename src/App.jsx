@@ -67,14 +67,19 @@ function App() {
   useEffect(() => {
     async function fetchTodos(){
       try {
-        const q = query(collection(db, "todos"), where("userId", "==", "test-user-1"))
+        // const q = query(collection(db, "todos"), where("userId", "==", "test-user-1"))
+        const q = query(collection(db, "demos"), where("rating", ">", 2))
         const querySnapshot = await getDocs(q)
+        let todosArr = []
+
         if (querySnapshot){
           console.log('Found user data')
           querySnapshot.forEach((doc) => {
-            console.log(doc.id, "=>", doc.data())
+            todosArr.push({...doc.data()})
           })
         }
+        setTodos(todosArr)
+        console.log(todos)
       } catch (err) {
         console.log(err)
       }
