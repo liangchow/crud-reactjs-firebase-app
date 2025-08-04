@@ -68,24 +68,13 @@ function App() {
     async function fetchTodos(){
       try {
         const q = query(collection(db, "todos"), where("userId", "==", "test-user-1"))
-        const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
-          let todosArr = []
-          QuerySnapshot.forEach((doc) => {
-            todosArr.push({...doc.data(), id: doc.id})
+        const querySnapshot = await getDocs(q)
+        if (querySnapshot){
+          console.log('Found user data')
+          querySnapshot.forEach((doc) => {
+            console.log(doc.id, "=>", doc.data())
           })
-          setTodos(todosArr)
-        })
-
-
-        // const querySnapshot = await getDocs(q)
-        // if (querySnapshot){
-        //   console.log('Found user data')
-        //   querySnapshot.forEach((doc) => {
-        //     setTodos((prev) => {
-        //       return[...prev, doc.data()]
-        //     })})
-        //   }
-          console.log(todos)
+        }
       } catch (err) {
         console.log(err)
       }
