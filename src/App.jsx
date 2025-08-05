@@ -75,11 +75,10 @@ function App() {
         if (querySnapshot){
           console.log('Found user data')
           querySnapshot.forEach((doc) => {
-            todosArr.push({...doc.data()})
+            todosArr.push({...doc.data(), id: doc.id})
           })
         }
         setTodos(todosArr)
-        console.log(todos)
       } catch (err) {
         console.log(err)
       }
