@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './index.css'
 import {db} from './firebase'
-import {query, collection, where, addDoc, getDocs, onSnapshot, QuerySnapshot} from 'firebase/firestore'
+import {query, collection, where, addDoc, getDocs, doc, getDoc} from 'firebase/firestore'
 
 // https://www.javascripttutorial.net/react-tutorial/react-todo-app/
 // https://upmostly.com/tutorials/build-a-todo-app-in-react-using-hooks
@@ -47,6 +47,32 @@ function App() {
     }
   }
 
+  // Read Users from firebase. 
+  // Who is the current user (RecipientID)? 
+  // We should see two comments:
+  // 1. "Test User 3 is mehh", 1/5 by test-user-1 (TU)
+  // 2. "Great to work with Test User 3", 5/5 by test-user-2 (T2)
+  useEffect(()=>{
+    async function fetchUser(){
+      const currentUser = 'test-user-3'
+
+      try {
+        console.log('Fetching user data')
+        const docRef = doc(db, 'users', currentUser)
+        const docSnap = await getDoc(docRef)
+        let firebaseData = {}
+        if (docSnap.exists()){
+          console.log('Found user data')
+          firebaseData = docSnap.data()
+          console.log(firebaseData)
+        }
+      } catch(err) {
+      console.log(err)
+    }}
+    fetchUser()
+  },[])
+
+
   // Create todo
   const createTodo = async (e) => {
     e.preventDefault(e)
@@ -67,7 +93,7 @@ function App() {
   useEffect(() => {
     async function fetchTodos(){
       try {
-        // const q = query(collection(db, "todos"), where("userId", "==", "test-user-1"))
+        // const q = query(collection(db, "todos"), where("recipientId", "==", currentUser))
         const q = query(collection(db, "demos"), where("rating", ">", 1))
         const querySnapshot = await getDocs(q)
         let todosArr = []
