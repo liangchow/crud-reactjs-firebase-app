@@ -68,7 +68,7 @@ function App() {
     async function fetchTodos(){
       try {
         // const q = query(collection(db, "todos"), where("userId", "==", "test-user-1"))
-        const q = query(collection(db, "demos"), where("rating", ">", 2))
+        const q = query(collection(db, "demos"), where("rating", ">", 1))
         const querySnapshot = await getDocs(q)
         let todosArr = []
 
@@ -88,7 +88,7 @@ function App() {
   },[])
 
 
-  // Update todo in firevase
+  // Update todo in firebase
   // Delete todo
 
 
