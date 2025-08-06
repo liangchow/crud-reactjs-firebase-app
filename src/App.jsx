@@ -47,10 +47,10 @@ function App() {
     }
   }
 
-  // Read Users from firebase. 
+  // Read user data from firebase. 
   // Who is the current user (RecipientID)? 
   // We should see two comments:
-  // 1. "Test User 3 is mehh", 1/5 by test-user-1 (TU)
+  // 1. "Test User 3 is mehh", 1/5 by test-user-1 (UO)
   // 2. "Great to work with Test User 3", 5/5 by test-user-2 (T2)
   useEffect(()=>{
     async function fetchUser(){
@@ -60,11 +60,11 @@ function App() {
         console.log('Fetching user data')
         const docRef = doc(db, 'users', currentUser)
         const docSnap = await getDoc(docRef)
-        let firebaseData = {}
+        let userData = {}
         if (docSnap.exists()){
           console.log('Found user data')
-          firebaseData = docSnap.data()
-          console.log(firebaseData)
+          userData = docSnap.data()
+          console.log(userData)
         }
       } catch(err) {
       console.log(err)
