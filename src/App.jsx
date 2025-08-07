@@ -98,7 +98,6 @@ function App() {
         const q = query(collection(db, "todos"), where("recipientId", "==", currentUser))
         // const q = query(collection(db, "demos"), where("rating", ">", 1))
         const querySnapshot = await getDocs(q)
-
         let todosArr = []
 
         if (querySnapshot){
@@ -106,6 +105,9 @@ function App() {
           querySnapshot.forEach((doc) => {
             todosArr.push({...doc.data(), id: doc.id})
           })
+
+          
+
         }
         setTodos(todosArr)
         console.log(todosArr)
