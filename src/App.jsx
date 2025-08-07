@@ -89,13 +89,14 @@ function App() {
     })
   }
 
-  // Read todo from firebase
+  // Read todos and peerID from firebase
   useEffect(() => {
     async function fetchTodos(){
       try {
         // const q = query(collection(db, "todos"), where("recipientId", "==", currentUser))
         const q = query(collection(db, "demos"), where("rating", ">", 1))
         const querySnapshot = await getDocs(q)
+
         let todosArr = []
 
         if (querySnapshot){
@@ -105,6 +106,7 @@ function App() {
           })
         }
         setTodos(todosArr)
+        console.log(todosArr)
       } catch (err) {
         console.log(err)
       }
