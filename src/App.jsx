@@ -95,8 +95,8 @@ function App() {
       // Set current user
       const currentUser = 'test-user-3'
       try {
-        const q = query(collection(db, "todos"), where("recipientId", "==", currentUser))
-        // const q = query(collection(db, "demos"), where("rating", ">", 1))
+        // const q = query(collection(db, "todos"), where("recipientId", "==", currentUser))
+        const q = query(collection(db, "demos"), where("rating", ">", 1))
         const querySnapshot = await getDocs(q)
         let todosArr = []
 
@@ -106,7 +106,7 @@ function App() {
             todosArr.push({...doc.data(), id: doc.id})
           })
 
-          
+
 
         }
         setTodos(todosArr)
