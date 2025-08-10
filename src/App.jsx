@@ -95,17 +95,25 @@ function App() {
       // Set current user
       const currentUser = 'test-user-3'
       try {
-        // const q = query(collection(db, "todos"), where("recipientId", "==", currentUser))
-        const q = query(collection(db, "demos"), where("rating", ">", 1))
+        const q = query(collection(db, "todos"), where("recipientId", "==", currentUser))
+        // const q = query(collection(db, "demos"), where("rating", ">", 1))
         const querySnapshot = await getDocs(q)
-        let todosArr = []
+        // let todosArr = []
 
-        if (querySnapshot){
-          console.log('Found user data')
-          querySnapshot.forEach((doc) => {
-            todosArr.push({...doc.data(), id: doc.id})
-          })
+        // if (querySnapshot){
+        //   console.log('Found user data')
+        //   querySnapshot.forEach((doc) => {
+        //     todosArr.push({...doc.data(), id: doc.id})
+        //   })
 
+        const groupPromises = querySnapshot.docs.map((doc) => {
+          const groupRef = doc.data().peerID
+          const groupDoc = await getDoc(groupRef)
+          return {
+            id: doc.id
+            ...doc.data()
+          }
+        })
 
 
         }
