@@ -75,55 +75,98 @@ function App() {
 
   // Create todo
   const createTodo = async (e) => {
-    e.preventDefault(e)
-    if (input === ''){
+    e.preventDefault()
+    if (comment === ''){
       alert('Please enter a valid comment.')
       return
     }
-    await addDoc(collection(db, 'todos'), {
-      firstName: firstName,
-      comment: input,
-      rating: 5,
-      status: true,
-      src: ''
-    })
+    
+    // Set current user as peerID (the person giving feedback)
+    const currentUser = 'test-user-1' // This would normally come from authentication
+    
+    try {
+      const docRef = await addDoc(collection(db, 'todos'), {
+        firstName: firstName,
+        lastName: lastName,
+        comment: comment,
+        rating: rating,
+        status: true,
+        src: '',
+        peerID: currentUser,
+        recipientId: 'test-user-3' // The person receiving the feedback
+      })
+      
+      console.log('Document written with ID: ', docRef.id)
+      
+      // Clear form fields after submission
+      setFirstName('')
+      setLastName('')
+      setComment('')
+      setRating(0)
+      
+      // Refresh todos list
+      fetchTodos()
+    } catch (err) {
+      console.error('Error adding document: ', err)
+    }
   }
 
-  // Read todos and peerID from firebase
-  useEffect(() => {
-    async function fetchTodos(){
-      // Set current user
-      const currentUser = 'test-user-3'
-      try {
-        const q = query(collection(db, "todos"), where("recipientId", "==", currentUser))
-        // const q = query(collection(db, "demos"), where("rating", ">", 1))
-        const querySnapshot = await getDocs(q)
-        // let todosArr = []
+  // Function to fetch todos with peer data
+  const fetchTodos = async () => {
+    // Set current user
+    const currentUser = 'test-user-3'
+    try {
+      const q = query(collection(db, "todos"), where("recipientId", "==", currentUser))
+      // const q = query(collection(db, "demos"), where("rating", ">", 1))
+      const querySnapshot = await getDocs(q)
+      let todosArr = []
 
-        // if (querySnapshot){
-        //   console.log('Found user data')
-        //   querySnapshot.forEach((doc) => {
-        //     todosArr.push({...doc.data(), id: doc.id})
-        //   })
-
-        const groupPromises = querySnapshot.docs.map((doc) => {
-          const groupRef = doc.data().peerID
-          const groupDoc = await getDoc(groupRef)
-          return {
-            id: doc.id
-            ...doc.data()
+      if (querySnapshot){
+        console.log('Found user data')
+        
+        // Create an array of promises to fetch user data for each todo
+        const todoPromises = querySnapshot.docs.map(async (doc) => {
+          const todoData = doc.data()
+          const todoWithId = {...todoData, id: doc.id}
+          
+          // Check if peerID exists
+          if (todoData.peerID) {
+            try {
+              // Get the user document using peerID
+              const userDoc = await getDoc(doc(db, 'users', todoData.peerID))
+              
+              if (userDoc.exists()) {
+                const userData = userDoc.data()
+                // Add peer's firstName and lastName to todo object
+                return {
+                  ...todoWithId,
+                  peerFirstName: userData.firstName || '',
+                  peerLastName: userData.lastName || ''
+                }
+              }
+            } catch (userErr) {
+              console.log('Error fetching peer data:', userErr)
+            }
           }
+          
+          // Return the original todo if no peerID or error occurred
+          return todoWithId
         })
-
-
-        }
-        setTodos(todosArr)
-        console.log(todosArr)
-      } catch (err) {
-        console.log(err)
+        
+        // Wait for all promises to resolve
+        todosArr = await Promise.all(todoPromises)
       }
-      // finally {setLoading(false)}
+      
+      setTodos(todosArr)
+      console.log('Todos with peer data:', todosArr)
+    } catch (err) {
+      console.log('Error fetching todos:', err)
     }
+    // finally {setLoading(false)}
+  }
+
+  // Read todos and peerID from firebase on component mount
+  useEffect(() => {
     fetchTodos()
   },[])
 
@@ -136,26 +179,25 @@ function App() {
     <div className='flex flex-col flex-1 gap-4'>
       
       <div className='flex flex-1 w-full justify-center gap-2 p-4'>
-        <form >
-          <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-          <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-          <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="Enter feedback" value={comment} onChange={(e) => setComment(e.target.value)} />
-          {[...Array(5)].map((star, starIndex) => {
-            starIndex += 1
-            return (
-                  <button type='button' key={starIndex} className={'text-2xl cursor-pointer opacity-50 ' + (starIndex <= (hover || rating) ? 'text-amber-400' : '')}
-                    onClick={()=> setRating(starIndex)}
-                    onMouseEnter={() => setHover(starIndex)}
-                    onMouseLeave={() => setHover(rating)}>
-                      <span>&#9733;</span>
-                  </button>
-            )            
-          })}
+        <form onSubmit={createTodo} className='flex flex-wrap gap-2 items-center'>
+          <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+          <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+          <input className='rounded-3xl border-2 border-solid border-indigo-300 px-2' placeholder="Enter feedback" value={comment} onChange={(e) => setComment(e.target.value)} required />
+          <div className='flex items-center'>
+            {[...Array(5)].map((star, starIndex) => {
+              starIndex += 1
+              return (
+                    <button type='button' key={starIndex} className={'text-2xl cursor-pointer opacity-50 ' + (starIndex <= (hover || rating) ? 'text-amber-400' : '')}
+                      onClick={()=> setRating(starIndex)}
+                      onMouseEnter={() => setHover(starIndex)}
+                      onMouseLeave={() => setHover(rating)}>
+                        <span>&#9733;</span>
+                    </button>
+              )            
+            })}
+          </div>
+          <button type='submit' className='text-indigo-600 hover:text-indigo-400 cursor-pointer transition duration-200 px-4 py-1 rounded-3xl border-2 border-solid border-indigo-300'> Submit</button>
         </form>
-        <button className='text-indigo-600 hover:text-indigo-400 cursor-pointer transition duration-200' onClick={() => {
-                handleAddTodo(firstName, lastName, comment, rating)
-                setComment('')
-            }}> Submit</button>
       </div>
       
       <ul className='flex flex-col flex-1 gap-1 p-4'>
@@ -167,6 +209,9 @@ function App() {
               </div>
               <div className={'flex flex-col ml-1 w-full ' + (todo.status == false ? ' opacity-50' : '')}>     
                 <span className='text-lg sm:text-xl font-semibold '>{todo.firstName} {todo.lastName}</span>
+                {todo.peerFirstName && todo.peerLastName && (
+                  <span className='text-sm text-indigo-600'>From: {todo.peerFirstName} {todo.peerLastName}</span>
+                )}
                 <span className='text-base sm:text-lg'>{todo.comment}</span>
               </div>
               <div className='flex p-2 ml-1 text-nowrap '>⭐ {todo.rating}/5</div>
@@ -189,6 +234,9 @@ function App() {
               </div>
               <div className='flex flex-col ml-1 w-full'>     
                 <span className='text-lg sm:text-xl font-semibold '>{todo.firstName} {todo.lastName}</span>
+                {todo.peerFirstName && todo.peerLastName && (
+                  <span className='text-sm text-indigo-600'>From: {todo.peerFirstName} {todo.peerLastName}</span>
+                )}
                 <span className='text-base sm:text-lg'>{todo.comment}</span>
               </div>
               <div className='flex p-2 ml-1 text-nowrap '>⭐ {todo.rating}/5</div>
