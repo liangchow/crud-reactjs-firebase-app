@@ -167,10 +167,7 @@ function App() {
                 {headshot(todo)}
               </div>
               <div className={'flex flex-col ml-1 w-full ' + (todo.status == false ? ' opacity-50' : '')}>     
-                <span className='text-lg sm:text-xl font-semibold '>{todo.firstName} {todo.lastName}</span>
-                {todo.peerFirstName && todo.peerLastName && (
-                  <span className='text-sm text-indigo-600 capitalize '>From: {todo.peerFirstName} {todo.peerLastName}</span>
-                )}
+                <span className='text-lg sm:text-xl font-semibold capitalize '>{todo.firstName} {todo.lastName}</span>
                 <span className='text-base sm:text-lg'>{todo.comment}</span>
               </div>
               <div className='flex p-2 ml-1 text-nowrap '>⭐ {todo.rating}/5</div>
@@ -183,7 +180,7 @@ function App() {
         }
       </ul>
 
-      <h2 className='text-indigo-800 text-center'>Display Below:</h2>
+      <h2 className='text-indigo-800 text-center'>DEMO Display Below:</h2>
 
       <ul className='flex flex-col flex-1 gap-1 p-4'>
         {todos?.filter(todo => todo.status == true).map((todo, todoIndex) => (
@@ -192,10 +189,7 @@ function App() {
                 {headshot(todo)}
               </div>
               <div className='flex flex-col ml-1 w-full'>     
-                <span className='text-lg sm:text-xl font-semibold '>{todo.firstName} {todo.lastName}</span>
-                {todo.peerFirstName && todo.peerLastName && (
-                  <span className='text-sm text-indigo-600'>From: {todo.peerFirstName} {todo.peerLastName}</span>
-                )}
+                <span className='text-lg sm:text-xl font-semibold capitalize '>{todo.firstName} {todo.lastName}</span>
                 <span className='text-base sm:text-lg'>{todo.comment}</span>
               </div>
               <div className='flex p-2 ml-1 text-nowrap '>⭐ {todo.rating}/5</div>
