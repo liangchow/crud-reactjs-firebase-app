@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './index.css'
 import {db} from './firebase'
-import {query, collection, where, addDoc, getDocs, doc, getDoc} from 'firebase/firestore'
+import {query, collection, where, addDoc, getDocs, doc, getDoc, updateDoc} from 'firebase/firestore'
 
 // https://www.javascripttutorial.net/react-tutorial/react-todo-app/
 // https://upmostly.com/tutorials/build-a-todo-app-in-react-using-hooks
@@ -21,18 +21,12 @@ function App() {
   const [rating, setRating] = useState(0)
   const [hover, setHover] = useState(null)
 
-  function handleAddTodo(newFirstName, newLastName, newFeedback, newRating){
-    const newTodo = {firstName: newFirstName, lastName: newLastName, comment: newFeedback, rating: newRating, status: true, src: ""}
-    const updatedTodos = [newTodo, ...todos]
-    setTodos(updatedTodos)
-  }
+  // function handleAddTodo(newFirstName, newLastName, newFeedback, newRating){
+  //   const newTodo = {firstName: newFirstName, lastName: newLastName, comment: newFeedback, rating: newRating, status: true, src: ""}
+  //   const updatedTodos = [newTodo, ...todos]
+  //   setTodos(updatedTodos)
+  // }
 
-  function handleToggleStatus(index){
-    const updatedTodos = [...todos]
-    updatedTodos[index].status = !updatedTodos[index].status
-    setTodos(updatedTodos)
-    console.log(updatedTodos[index])
-    }
 
   function headshot(peer){
       return (
@@ -131,6 +125,21 @@ function App() {
 
 
   // Update todo in firebase
+  async function handleToggleStatus(todo){
+    // current user for testing
+    const currentUser = 'test-user-3'
+    const q = query(collection(db, "todos"), where("userID", "==", currentUser))
+
+    await updateDoc(q, {
+      status: !todo.status
+    })
+
+    // const updatedTodos = [...todos]
+    // updatedTodos[index].status = !updatedTodos[index].status
+    // setTodos(updatedTodos)
+    // console.log(updatedTodos[index])
+    }
+
   // Delete todo
 
 
@@ -168,11 +177,11 @@ function App() {
               </div>
               <div className={'flex flex-col ml-1 w-full ' + (todo.status == false ? ' opacity-50' : '')}>     
                 <span className='text-lg sm:text-xl font-semibold capitalize '>{todo.firstName} {todo.lastName}</span>
-                <span className='text-base sm:text-lg'>{todo.comment}</span>
+                <span className='text-base sm:text-lg capitalize'>{todo.comment}</span>
               </div>
               <div className='flex p-2 ml-1 text-nowrap '>⭐ {todo.rating}/5</div>
               <div className='flex flex-col items-center p-2 gap-2 '>
-                <button onClick={() => handleToggleStatus(todoIndex)}><i className={"text-indigo-600 hover:text-indigo-400 cursor-pointer transition duration-200 " + (todo.status == false ? " fa-solid fa-eye-slash opacity-50" : " fa-solid fa-eye")}></i></button>
+                <button onClick={() => handleToggleStatus(todo)}><i className={"text-indigo-600 hover:text-indigo-400 cursor-pointer transition duration-200 " + (todo.status == false ? " fa-solid fa-eye-slash opacity-50" : " fa-solid fa-eye")}></i></button>
               </div>
             </li>
           ))) 
@@ -190,7 +199,7 @@ function App() {
               </div>
               <div className='flex flex-col ml-1 w-full'>     
                 <span className='text-lg sm:text-xl font-semibold capitalize '>{todo.firstName} {todo.lastName}</span>
-                <span className='text-base sm:text-lg'>{todo.comment}</span>
+                <span className='text-base sm:text-lg capitalize'>{todo.comment}</span>
               </div>
               <div className='flex p-2 ml-1 text-nowrap '>⭐ {todo.rating}/5</div>
             </li>
