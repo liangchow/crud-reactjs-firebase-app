@@ -91,9 +91,8 @@ function App() {
         comment: comment,
         rating: rating,
         status: true,
-        src: '',
-        peerID: currentUser,
-        recipientId: 'test-user-3' // The person receiving the feedback
+        peerID: peerID,
+        recipientId: currentUser // The person receiving the feedback
       })
       
       console.log('Document written with ID: ', docRef.id)
@@ -140,8 +139,8 @@ function App() {
                 // Add peer's firstName and lastName to todo object
                 return {
                   ...todoWithId,
-                  peerFirstName: userData.firstName || '',
-                  peerLastName: userData.lastName || ''
+                  firstName: userData.firstName || '',
+                  lastName: userData.lastName || ''
                 }
               }
             } catch (userErr) {
