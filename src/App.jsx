@@ -35,24 +35,16 @@ function App() {
     }
 
   function headshot(peer){
-    if (peer.src) {
-      return (
-        <image className='rounded-full border border-solid border-indigo-500 ' src={peer.src} width={40} height={40} style={{objectFit: "contain"}} alt="pp" />
-    )} else {
       return (
         <div className='size-[40px] rounded-full bg-indigo-500 inline-flex items-center justify-center '>
-            <p className={'text-base text-indigo-50 '}>{peer.firstName[0]}{peer.lastName[0]}</p>
+            <p className={'text-base text-indigo-50 uppercase '}>{peer.firstName[0]}{peer.lastName[0]}</p>
         </div>
       )
     }
-  }
+  
 
   // Read user data from firebase. 
-  // Who is the current user (RecipientID)? 
-  // We should see two comments:
-  // 1. "Test User 3 is mehh", 1/5 by test-user-1 (UO)
-  // 2. "Great to work with Test User 3", 5/5 by test-user-2 (T2)
-  useEffect(()=>{
+  useEffect(() => {
     async function fetchUser(){
       const currentUser = 'test-user-3'
 
@@ -91,8 +83,7 @@ function App() {
         comment: comment,
         rating: rating,
         status: true,
-        peerID: peerID,
-        recipientId: currentUser // The person receiving the feedback
+        userID: currentUser // The person receiving the feedback
       })
       
       console.log('Document written with ID: ', docRef.id)
@@ -111,61 +102,30 @@ function App() {
   }
 
   // Function to fetch todos with peer data
-  const fetchTodos = async () => {
-    // Set current user
-    const currentUser = 'test-user-3'
-    try {
-      const q = query(collection(db, "todos"), where("recipientId", "==", currentUser))
-      // const q = query(collection(db, "demos"), where("rating", ">", 1))
-      const querySnapshot = await getDocs(q)
-      let todosArr = []
-
-      if (querySnapshot){
-        console.log('Found user data')
-        
-        // Create an array of promises to fetch user data for each todo
-        const todoPromises = querySnapshot.docs.map(async (doc) => {
-          const todoData = doc.data()
-          const todoWithId = {...todoData, id: doc.id}
-          
-          // Check if peerID exists
-          if (todoData.peerID) {
-            try {
-              // Get the user document using peerID
-              const userDoc = await getDoc(doc(db, 'users', todoData.peerID))
-              
-              if (userDoc.exists()) {
-                const userData = userDoc.data()
-                // Add peer's firstName and lastName to todo object
-                return {
-                  ...todoWithId,
-                  firstName: userData.firstName || '',
-                  lastName: userData.lastName || ''
-                }
-              }
-            } catch (userErr) {
-              console.log('Error fetching peer data:', userErr)
-            }
-          }
-          
-          // Return the original todo if no peerID or error occurred
-          return todoWithId
-        })
-        
-        // Wait for all promises to resolve
-        todosArr = await Promise.all(todoPromises)
-      }
-      
-      setTodos(todosArr)
-      console.log('Todos with peer data:', todosArr)
-    } catch (err) {
-      console.log('Error fetching todos:', err)
-    }
-    // finally {setLoading(false)}
-  }
-
-  // Read todos and peerID from firebase on component mount
   useEffect(() => {
+
+    async function fetchTodos() {
+      // Set current user for testing
+      const currentUser = 'test-user-3'
+      try {
+        const q = query(collection(db, "todos"), where("userID", "==", currentUser))
+        // const q = query(collection(db, "demos"), where("rating", ">", 1))
+        const querySnapshot = await getDocs(q)
+        let todosArr = []
+
+        if (querySnapshot){
+          console.log('Found user data')
+          querySnapshot.forEach((doc) => {
+            todosArr.push({...doc.data(), id: doc.id})
+          })}
+        
+        setTodos(todosArr)
+        console.log(todos)
+      } catch (err) {
+        console.log('Error fetching todos:', err)
+      }
+      // finally {setLoading(false)}
+    }
     fetchTodos()
   },[])
 
@@ -209,7 +169,7 @@ function App() {
               <div className={'flex flex-col ml-1 w-full ' + (todo.status == false ? ' opacity-50' : '')}>     
                 <span className='text-lg sm:text-xl font-semibold '>{todo.firstName} {todo.lastName}</span>
                 {todo.peerFirstName && todo.peerLastName && (
-                  <span className='text-sm text-indigo-600'>From: {todo.peerFirstName} {todo.peerLastName}</span>
+                  <span className='text-sm text-indigo-600 capitalize '>From: {todo.peerFirstName} {todo.peerLastName}</span>
                 )}
                 <span className='text-base sm:text-lg'>{todo.comment}</span>
               </div>
