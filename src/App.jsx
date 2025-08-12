@@ -103,7 +103,7 @@ function App() {
         lastName: lastName,
         comment: comment,
         rating: rating,
-        status: true,
+        status: true, // Default status to true
         userID: currentUser // The person receiving the feedback
       })
       
