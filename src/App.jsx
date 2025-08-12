@@ -40,7 +40,7 @@ function App() {
   // Read user data from firebase. 
   useEffect(() => {
     async function fetchUser(){
-      const currentUser = 'test-user-3'
+      const currentUser = 'test-user-1'
 
       try {
         console.log('Fetching user data')
@@ -63,7 +63,7 @@ function App() {
 
     async function fetchTodos() {
       // Set current user for testing
-      const currentUser = 'test-user-3'
+      const currentUser = 'test-user-1'
       try {
         const q = query(collection(db, "todos"), where("userID", "==", currentUser))
         // const q = query(collection(db, "demos"), where("rating", ">", 1))
@@ -95,7 +95,7 @@ function App() {
     }
     
     // Set current user as peerID (the person giving feedback)
-    const currentUser = 'test-user-1' // This would normally come from authentication
+    const currentUser = 'test-user-1'
     
     try {
       const docRef = await addDoc(collection(db, 'todos'), {
@@ -118,11 +118,9 @@ function App() {
       // Refresh todos list
       fetchTodos()
     } catch (err) {
-      console.error('Error adding document: ', err)
+      console.log(err)
     }
   }
-
-
 
   // Update todo in firebase
   async function handleToggleStatus(todo){
