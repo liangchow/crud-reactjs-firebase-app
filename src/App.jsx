@@ -58,6 +58,33 @@ function App() {
     fetchUser()
   },[])
 
+  // Function to fetch todos with peer data
+  useEffect(() => {
+
+    async function fetchTodos() {
+      // Set current user for testing
+      const currentUser = 'test-user-3'
+      try {
+        const q = query(collection(db, "todos"), where("userID", "==", currentUser))
+        // const q = query(collection(db, "demos"), where("rating", ">", 1))
+        const querySnapshot = await getDocs(q)
+        let todosArr = []
+
+        if (querySnapshot){
+          console.log('Found user data')
+          querySnapshot.forEach((doc) => {
+            todosArr.push({...doc.data(), id: doc.id})
+          })}
+        
+        setTodos(todosArr)
+        console.log(todos)
+      } catch (err) {
+        console.log(err)
+      }
+      // finally {setLoading(false)}
+    }
+    fetchTodos()
+  },[])
 
   // Create todo
   const createTodo = async (e) => {
@@ -95,33 +122,6 @@ function App() {
     }
   }
 
-  // Function to fetch todos with peer data
-  useEffect(() => {
-
-    async function fetchTodos() {
-      // Set current user for testing
-      const currentUser = 'test-user-3'
-      try {
-        const q = query(collection(db, "todos"), where("userID", "==", currentUser))
-        // const q = query(collection(db, "demos"), where("rating", ">", 1))
-        const querySnapshot = await getDocs(q)
-        let todosArr = []
-
-        if (querySnapshot){
-          console.log('Found user data')
-          querySnapshot.forEach((doc) => {
-            todosArr.push({...doc.data(), id: doc.id})
-          })}
-        
-        setTodos(todosArr)
-        console.log(todos)
-      } catch (err) {
-        console.log('Error fetching todos:', err)
-      }
-      // finally {setLoading(false)}
-    }
-    fetchTodos()
-  },[])
 
 
   // Update todo in firebase
@@ -142,8 +142,7 @@ function App() {
       setTodos(updatedTodos)
     } catch (err) {
       console.log(err)
-    }
-    }
+    }}
 
   // Delete todo
 
