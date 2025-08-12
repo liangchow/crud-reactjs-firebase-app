@@ -127,16 +127,11 @@ function App() {
   // Update todo in firebase
   async function handleToggleStatus(todo){
     try {
-      const todoDocRef = doc(db, "todos", todo.id)
-      
-      // Update the document with the new status
-      await updateDoc(todoDocRef, {
+      const todoRef = doc(db, "todos", todo.id)
+      await updateDoc(todoRef, {
         status: !todo.status
       })
       
-      console.log('Todo status updated successfully')
-      
-      // Update the local state to reflect the change
       const updatedTodos = todos.map(item => {
         if (item.id === todo.id) {
           return { ...item, status: !item.status }
@@ -145,8 +140,8 @@ function App() {
       })
       
       setTodos(updatedTodos)
-    } catch (error) {
-      console.error('Error updating todo status:', error)
+    } catch (err) {
+      console.log(err)
     }
     }
 
