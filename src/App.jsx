@@ -98,6 +98,7 @@ function App() {
     const currentUser = 'test-user-1'
     
     try {
+      // Add todo in firebase
       const docRef = await addDoc(collection(db, 'todos'), {
         firstName: firstName,
         lastName: lastName,
@@ -107,7 +108,7 @@ function App() {
         userID: currentUser // The person receiving the feedback
       })
       
-      console.log('Document written with ID: ', docRef.id)
+      // console.log('Document written with ID: ', docRef.id)
       
       // Clear form fields after submission
       setFirstName('')
@@ -122,7 +123,7 @@ function App() {
     }
   }
 
-  // Update todo in firebase
+  // Update todo.status in firebase
   async function handleToggleStatus(todo){
     try {
       const todoRef = doc(db, "todos", todo.id)
