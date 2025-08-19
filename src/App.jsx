@@ -6,6 +6,7 @@ import {query, collection, where, addDoc, getDocs, doc, getDoc, updateDoc} from 
 // https://www.javascripttutorial.net/react-tutorial/react-todo-app/
 // https://upmostly.com/tutorials/build-a-todo-app-in-react-using-hooks
 // https://www.youtube.com/watch?v=drF8HbnW87w
+// https://www.freecodecamp.org/news/how-to-build-a-todo-application-using-reactjs-and-firebase/
 
 function App() {
 
