@@ -3,18 +3,15 @@ import './index.css'
 import {db} from './firebase'
 import {query, collection, where, addDoc, getDocs, doc, getDoc, updateDoc} from 'firebase/firestore'
 
-// https://www.javascripttutorial.net/react-tutorial/react-todo-app/
-// https://upmostly.com/tutorials/build-a-todo-app-in-react-using-hooks
-// https://www.youtube.com/watch?v=drF8HbnW87w
-// https://www.freecodecamp.org/news/how-to-build-a-todo-application-using-reactjs-and-firebase/
-
 function App() {
 
+  // React
   // const [todos, setTodos] = useState([
   //   {firstName: "Joe", lastName: "Doe", comment: "You are awesome!", rating: 4, status: true, src: ""},
   //   {firstName: "Simone", lastName: "Ming", comment: "You're the best ;) I have not met people like you. I am wishing you the best in your future endeavors", rating: 5, status: false, src: ""},
   //   {firstName: "Jane", lastName: "Moon", comment: "Aiks! You are getting there.", rating: 4, status: true, src: ""}
   //   ])
+
   const [todos, setTodos] = useState([])
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
@@ -22,13 +19,14 @@ function App() {
   const [rating, setRating] = useState(0)
   const [hover, setHover] = useState(null)
 
+  // React
   // function handleAddTodo(newFirstName, newLastName, newFeedback, newRating){
   //   const newTodo = {firstName: newFirstName, lastName: newLastName, comment: newFeedback, rating: newRating, status: true, src: ""}
   //   const updatedTodos = [newTodo, ...todos]
   //   setTodos(updatedTodos)
   // }
 
-
+  // Create avatar using user's initials
   function headshot(peer){
       return (
         <div className='size-[40px] rounded-full bg-indigo-500 inline-flex items-center justify-center '>
