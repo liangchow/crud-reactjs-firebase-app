@@ -16,3 +16,4 @@ The primary objective of this app is to simulate and connect a many-to-many rela
 - [React Todo App With Firebase v9 / CRUD Functionality](https://www.youtube.com/watch?v=drF8HbnW87w)
 - [How to Build a TodoApp using ReactJS and Firebase](https://www.freecodecamp.org/news/how-to-build-a-todo-application-using-reactjs-and-firebase/)
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/fb3de259-7d32-4903-a2d7-cfdeb850b6ef/deploy-status)](https://app.netlify.com/projects/feedback-firebase/deploys)
